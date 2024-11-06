@@ -22,11 +22,16 @@ const UsersTable = () => {
           const { firstName, lastName, image } = row.original;
 
           return (
-            <>
-              <img src={image} alt='' />
-              {firstName}
-              {lastName}
-            </>
+            <div className='flex flex-row items-center'>
+              <img
+                src={image}
+                className='w-[32px] h-[32px] mr-[4px] border border-solid border-[rgba(0, 0, 0, 0.34)] rounded-full'
+                alt=''
+              />
+              <span className='font-medium'>
+                {firstName} {lastName}
+              </span>
+            </div>
           );
         },
       },
@@ -48,13 +53,13 @@ const UsersTable = () => {
           return (
             <>
               {gender === 'male' ? (
-                <>
+                <div className='flex flex-row items-center'>
                   <IconMale /> Male
-                </>
+                </div>
               ) : (
-                <>
+                <div className='flex flex-row items-center'>
                   <IconFemale /> Female
-                </>
+                </div>
               )}
             </>
           );
@@ -84,18 +89,18 @@ const UsersTable = () => {
           );
         },
       },
-      {
-        header: 'Domain',
-        accessorKey: 'userAgent',
-      },
-      {
-        header: 'IP',
-        accessorKey: 'ip',
-      },
-      {
-        header: 'Mac IP',
-        accessorKey: 'macAddress',
-      },
+      // {
+      //   header: 'Domain',
+      //   accessorKey: 'userAgent',
+      // },
+      // {
+      //   header: 'IP',
+      //   accessorKey: 'ip',
+      // },
+      // {
+      //   header: 'Mac IP',
+      //   accessorKey: 'macAddress',
+      // },
     ],
     []
   );
@@ -121,7 +126,7 @@ const UsersTable = () => {
             {headerGroup.headers.map((header) => (
               <th
                 key={header.id}
-                className='py-[4px] px-[6px] bg-[#EAEDF0] uppercase text-left font-semibold text-[10px] text-[#5F6E7C]'
+                className='p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C]'
               >
                 {flexRender(
                   header.column.columnDef.header,
@@ -138,11 +143,7 @@ const UsersTable = () => {
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.id}
-                style={{
-                  padding: '10px',
-                  border: 'solid 1px gray',
-                  background: 'papayawhip',
-                }}
+                className='py-[12px] px-[8px] bg-[#FFFFFF] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932]'
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
