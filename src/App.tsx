@@ -1,7 +1,7 @@
-import './App.css';
+import UsersTable from './components/UsersTable/UsersTable';
 
 function App() {
-  return <></>;
+  return <UsersTable />;
 }
 
 export default App;
