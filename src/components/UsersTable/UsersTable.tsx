@@ -1,3 +1,4 @@
+import { useGetUsersQuery, User } from '../../services/users';
 import {
   useReactTable,
   ColumnDef,
@@ -5,34 +6,55 @@ import {
   getCoreRowModel,
 } from '@tanstack/react-table';
 
-type TableData = {
-  col1: string;
-  col2: string;
-};
-
-const data: TableData[] = [
-  { col1: 'Hello', col2: 'World' },
-  { col1: 'react-table', col2: 'rocks' },
-  { col1: 'whatever', col2: 'you want' },
-];
-
-const columns: ColumnDef<TableData>[] = [
-  {
-    accessorKey: 'col1',
-    header: 'Column 1',
-  },
-  {
-    accessorKey: 'col2',
-    header: 'Column 2',
-  },
-];
-
 const UsersTable = () => {
+  const { data, error, isLoading } = useGetUsersQuery();
+
+  const columns: ColumnDef<User>[] = [
+    {
+      accessorKey: 'firstName',
+      header: 'First Name',
+    },
+    {
+      accessorKey: 'lastName',
+      header: 'Last Name',
+    },
+    {
+      accessorKey: 'email',
+      header: 'Email',
+    },
+    {
+      accessorKey: 'age',
+      header: 'Age',
+    },
+    {
+      accessorKey: 'gender',
+      header: 'Gender',
+    },
+    {
+      accessorKey: 'phone',
+      header: 'Phone',
+    },
+    {
+      accessorKey: 'image',
+      header: 'Image',
+      cell: ({ row }) => (
+        <img src={row.getValue('image')} alt='user' width='50' />
+      ),
+    },
+  ];
+
   const table = useReactTable({
-    data,
+    data: data?.users ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>An error occurred: {error.toString()}</p>;
+
+  if (!data || data.users.length === 0) {
+    return <p>No data available</p>;
+  }
 
   return (
     <table style={{ border: 'solid 1px black' }}>
@@ -40,7 +62,15 @@ const UsersTable = () => {
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <th key={header.id}>
+              <th
+                key={header.id}
+                style={{
+                  borderBottom: 'solid 3px red',
+                  background: 'aliceblue',
+                  color: 'black',
+                  fontWeight: 'bold',
+                }}
+              >
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -54,7 +84,14 @@ const UsersTable = () => {
         {table.getRowModel().rows.map((row) => (
           <tr key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <td key={cell.id}>
+              <td
+                key={cell.id}
+                style={{
+                  padding: '10px',
+                  border: 'solid 1px gray',
+                  background: 'papayawhip',
+                }}
+              >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>
             ))}
