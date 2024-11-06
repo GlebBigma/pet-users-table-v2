@@ -114,19 +114,14 @@ const UsersTable = () => {
   }
 
   return (
-    <table style={{ border: 'solid 1px black' }}>
+    <table>
       <thead>
         {table.getHeaderGroups().map((headerGroup) => (
           <tr key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
               <th
                 key={header.id}
-                style={{
-                  borderBottom: 'solid 3px red',
-                  background: 'aliceblue',
-                  color: 'black',
-                  fontWeight: 'bold',
-                }}
+                className='py-[4px] px-[6px] bg-[#EAEDF0] uppercase text-left font-semibold text-[10px] text-[#5F6E7C]'
               >
                 {flexRender(
                   header.column.columnDef.header,
