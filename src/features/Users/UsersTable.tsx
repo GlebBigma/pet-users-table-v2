@@ -9,8 +9,12 @@ import {
 } from '@tanstack/react-table';
 import moment from 'moment';
 import SearchField from '../../components/UIComponents/SearchField/SearchField';
+import NotFound from '../../components/UIComponents/EmptyState/EmptyState';
 import IconMale from '../../components/Icons/IconMale';
 import IconFemale from '../../components/Icons/IconFemale';
+import IconQuestion from '../../components/Icons/IconQuestion';
+import IconLoading from '../../components/Icons/IconLoading';
+import IconError from '../../components/Icons/IconError';
 
 const UsersTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -117,50 +121,62 @@ const UsersTable: React.FC = () => {
     setSearchTerm(event.target.value);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>An error occurred: {error.toString()}</p>;
+  const renderUsersTableContent = () => {
+    if (isLoading) {
+      return <NotFound icon={<IconLoading />} title='Loading Page' />;
+    }
 
-  if (!data || data.users.length === 0) {
-    return <p>No data available</p>;
-  }
+    if (error)
+      return (
+        <NotFound icon={<IconError />} title='Opps, something went wrong' />
+      );
+
+    if (!data || data.users.length === 0) {
+      return <NotFound icon={<IconQuestion />} title='Not Found' />;
+    }
+
+    return (
+      <table className='min-w-full table-auto border-collapse border-none'>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className='first:sticky first:left-0 p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C] border-t-0 first:border-l-0 last:border-r-0'
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className='first:min-w-[180px] first:sticky first:left-0 py-[12px] px-[8px] bg-[#FFFFFF] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932] whitespace-nowrap first:border-l-0 last:border-r-0'
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <>
       <SearchField value={searchTerm} onChange={handleSearchChange} />
-      <div className='overflow-x-auto border border-solid border-[#EAEDF0] rounded-tl-[12px] rounded-tr-[12px] border-b-0'>
-        <table className='min-w-full table-auto border-collapse border-none'>
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className='p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C] border-t-0 first:border-l-0 last:border-r-0'
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className='first:min-w-[180px] py-[12px] px-[8px] bg-[#FFFFFF] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932] whitespace-nowrap first:border-l-0 last:border-r-0'
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className='h-[550px] overflow-x-auto border border-solid border-[#EAEDF0] rounded-[12px] bg-[#f7faf9]'>
+        {renderUsersTableContent()}
       </div>
     </>
   );
