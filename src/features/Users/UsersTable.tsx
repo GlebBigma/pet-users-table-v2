@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import { useGetUsersQuery } from '../../services/users';
 import { User } from '../../services/types';
 import {
@@ -8,11 +8,13 @@ import {
   getCoreRowModel,
 } from '@tanstack/react-table';
 import moment from 'moment';
+import SearchField from '../../components/UIComponents/SearchField/SearchField';
 import IconMale from '../../components/Icons/IconMale';
 import IconFemale from '../../components/Icons/IconFemale';
 
-const UsersTable = () => {
-  const { data, error, isLoading } = useGetUsersQuery();
+const UsersTable: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const { data, error, isLoading } = useGetUsersQuery({ searchTerm });
 
   const columns: ColumnDef<User>[] = useMemo(
     () => [
@@ -89,18 +91,18 @@ const UsersTable = () => {
           );
         },
       },
-      // {
-      //   header: 'Domain',
-      //   accessorKey: 'userAgent',
-      // },
-      // {
-      //   header: 'IP',
-      //   accessorKey: 'ip',
-      // },
-      // {
-      //   header: 'Mac IP',
-      //   accessorKey: 'macAddress',
-      // },
+      {
+        header: 'Domain',
+        accessorKey: 'userAgent',
+      },
+      {
+        header: 'IP',
+        accessorKey: 'ip',
+      },
+      {
+        header: 'Mac IP',
+        accessorKey: 'macAddress',
+      },
     ],
     []
   );
@@ -111,6 +113,10 @@ const UsersTable = () => {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>An error occurred: {error.toString()}</p>;
 
@@ -119,39 +125,42 @@ const UsersTable = () => {
   }
 
   return (
-    <table>
-      <thead>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th
-                key={header.id}
-                className='p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C]'
-              >
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext()
-                )}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <td
-                key={cell.id}
-                className='py-[12px] px-[8px] bg-[#FFFFFF] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932]'
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <>
+      <SearchField value={searchTerm} onChange={handleSearchChange} />
+      <table>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className='p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C]'
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  className='py-[12px] px-[8px] bg-[#FFFFFF] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932]'
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
 
