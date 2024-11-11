@@ -15,12 +15,17 @@ import IconFemale from '../../components/Icons/IconFemale';
 import IconQuestion from '../../components/Icons/IconQuestion';
 import IconLoading from '../../components/Icons/IconLoading';
 import IconError from '../../components/Icons/IconError';
+import UsersTableSettings from './UsersTableSettings';
+
+export type CustomColumnDef<TData> = ColumnDef<TData> & {
+  header: string;
+};
 
 const UsersTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { data, error, isLoading } = useGetUsersQuery({ searchTerm });
 
-  const columns: ColumnDef<User>[] = useMemo(
+  const columns: CustomColumnDef<User>[] = useMemo(
     () => [
       {
         header: 'Full Name',
@@ -175,7 +180,9 @@ const UsersTable: React.FC = () => {
   return (
     <>
       <SearchField value={searchTerm} onChange={handleSearchChange} />
-      <div className='h-[550px] overflow-x-auto border border-solid border-[#EAEDF0] rounded-[12px] bg-[#f7faf9]'>
+
+      <div className='h-[550px] overflow-x-auto relative border border-solid border-[#EAEDF0] rounded-[12px] bg-[#f7faf9]'>
+        <UsersTableSettings columns={columns} />
         {renderUsersTableContent()}
       </div>
     </>
