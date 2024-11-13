@@ -1,20 +1,24 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { CustomColumnDef } from './UsersTable';
-import { User } from '../../services/types';
-import SearchField from '../../components/UIComponents/SearchField/SearchField';
 import IconGear from '../../components/Icons/IconGear';
+import IconCheck from '../../components/Icons/IconCheck';
 
 interface UsersTableSettingsProps {
-  columns: CustomColumnDef<User>[];
+  columns: string[];
+  visibleColumns: { [key: string]: boolean };
+  onToggleColumn: (columnName: string) => void;
 }
 
-const UsersTableSettings: React.FC<UsersTableSettingsProps> = ({ columns }) => {
+const UsersTableSettings: React.FC<UsersTableSettingsProps> = ({
+  columns,
+  visibleColumns,
+  onToggleColumn,
+}) => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className='p-[1px] pr-[4px] pl-[5px] absolute top-[-1px] right-[-1px] border border-solid border-[#EAEDF0]'
-          aria-label='Customise options'
+          className='p-[1px] pr-[4px] pl-[5px] absolute top-[0px] right-[0px] z-10 border border-solid border-[#EAEDF0] rounded-tr-[12px] outline-none'
+          aria-label='Customize options'
         >
           <div className='h-[24px] w-[24px] flex items-center justify-center bg-[#DEDEDE] rounded-full'>
             <IconGear width='16' />
@@ -28,21 +32,35 @@ const UsersTableSettings: React.FC<UsersTableSettingsProps> = ({ columns }) => {
           sideOffset={5}
           align='end'
         >
-          <SearchField />
-
           {columns.map((column) => (
             <DropdownMenu.Item
-              key={column.header}
-              className={`py-[10px] group relative flex h-[30px] select-none items-center rounded-[3px] pl-[8px] pr-[5px] text-[11px] leading-none outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-violet9 data-[disabled]:text-mauve8 data-[highlighted]:text-violet1 ${
-                ['Full Name', 'Username', 'Email'].includes(column.header)
-                  ? 'text-[#5F6E7C]'
+              key={column}
+              className={`flex items-center cursor-pointer hover:bg-[#F4F8FC] text-[#202932] p-[8px] text-[14px] leading-[14px] ${
+                ['Full Name', 'Username', 'Email'].includes(column)
+                  ? 'outline-none hover:bg-transparent hover:cursor-auto'
                   : ''
               }`}
+              onSelect={() => onToggleColumn(column)}
             >
-              {column.header}
-              <div className='ml-auto pl-5 text-mauve11 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white'>
-                +
-              </div>
+              <input
+                type='checkbox'
+                checked={visibleColumns[column]}
+                onChange={() => onToggleColumn(column)}
+                disabled={['Full Name', 'Username', 'Email'].includes(column)}
+                className='mr-2'
+                style={{ visibility: 'hidden' }}
+              />
+              <span
+                className={`flex-grow ${
+                  ['Full Name', 'Username', 'Email'].includes(column)
+                    ? 'text-gray-500'
+                    : ''
+                }`}
+              >
+                {column}
+              </span>
+              {visibleColumns[column] && <IconCheck />}{' '}
+              {/* Показує іконку, якщо колонка видима */}
             </DropdownMenu.Item>
           ))}
         </DropdownMenu.Content>
