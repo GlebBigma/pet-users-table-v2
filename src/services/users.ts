@@ -5,9 +5,9 @@ export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://dummyjson.com/' }),
   endpoints: (builder) => ({
-    getUsers: builder.query<UsersData, { searchTerm?: string }>({
-      query: ({ searchTerm }) =>
-        `users${searchTerm ? `/search?q=${searchTerm}` : ''}`,
+    getUsers: builder.query<UsersData, { searchTerm: string; limit?: number }>({
+      query: ({ searchTerm = '', limit = 10 }) =>
+        `users/search?q=${searchTerm}&limit=${limit}`,
     }),
   }),
 });

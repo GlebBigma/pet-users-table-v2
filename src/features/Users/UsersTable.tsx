@@ -10,12 +10,13 @@ import {
 import moment from 'moment';
 import SearchField from '../../components/UIComponents/SearchField/SearchField';
 import NotFound from '../../components/UIComponents/EmptyState/EmptyState';
+import UsersTableSettings from './UsersTableSettings';
+import Pagination from '../../components/UIComponents/Pagintaion/Pagination';
 import IconMale from '../../components/Icons/IconMale';
 import IconFemale from '../../components/Icons/IconFemale';
 import IconQuestion from '../../components/Icons/IconQuestion';
 import IconLoading from '../../components/Icons/IconLoading';
 import IconError from '../../components/Icons/IconError';
-import UsersTableSettings from './UsersTableSettings';
 
 export type CustomColumnDef<TData> = ColumnDef<TData> & {
   header: string;
@@ -23,7 +24,7 @@ export type CustomColumnDef<TData> = ColumnDef<TData> & {
 
 const UsersTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { data, error, isLoading } = useGetUsersQuery({ searchTerm });
+  const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [visibleColumns, setVisibleColumns] = useState<{
     [key: string]: boolean;
   }>({
@@ -37,6 +38,10 @@ const UsersTable: React.FC = () => {
     Domain: true,
     IP: true,
     'Mac IP': true,
+  });
+  const { data, error, isLoading } = useGetUsersQuery({
+    searchTerm,
+    limit: itemsPerPage,
   });
 
   const toggleColumnVisibility = (columnName: string) => {
@@ -200,6 +205,8 @@ const UsersTable: React.FC = () => {
     );
   };
 
+  console.log('>>> ', itemsPerPage);
+
   return (
     <>
       <SearchField value={searchTerm} onChange={handleSearchChange} />
@@ -213,6 +220,10 @@ const UsersTable: React.FC = () => {
         <div className='h-[550px] overflow-x-auto relative border border-solid border-[#EAEDF0] rounded-[12px] bg-[#f7faf9]'>
           {renderUsersTableContent()}
         </div>
+        <Pagination
+          itemsPerPage={itemsPerPage}
+          setItemsPerPage={setItemsPerPage}
+        />
       </div>
     </>
   );
