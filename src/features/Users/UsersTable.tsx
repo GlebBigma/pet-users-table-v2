@@ -25,6 +25,7 @@ export type CustomColumnDef<TData> = ColumnDef<TData> & {
 const UsersTable: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [visibleColumns, setVisibleColumns] = useState<{
     [key: string]: boolean;
   }>({
@@ -42,6 +43,7 @@ const UsersTable: React.FC = () => {
   const { data, error, isLoading } = useGetUsersQuery({
     searchTerm,
     limit: itemsPerPage,
+    page: currentPage,
   });
 
   const toggleColumnVisibility = (columnName: string) => {
@@ -205,7 +207,9 @@ const UsersTable: React.FC = () => {
     );
   };
 
-  console.log('>>> ', itemsPerPage);
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -221,8 +225,11 @@ const UsersTable: React.FC = () => {
           {renderUsersTableContent()}
         </div>
         <Pagination
+          totalItems={data?.total}
           itemsPerPage={itemsPerPage}
           setItemsPerPage={setItemsPerPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
         />
       </div>
     </>
