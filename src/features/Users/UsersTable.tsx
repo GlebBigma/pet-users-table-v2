@@ -178,7 +178,7 @@ const UsersTable: React.FC = () => {
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className='first:sticky first:left-0 p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C] border-t-0 first:border-l-0 last:border-r-0'
+                  className='sticky top-0 first:z-10 first:left-0 p-[7px] bg-[#F7F7F8] border border-solid border-[#EAEDF0] leading-[12px] tracking-[0.2px] uppercase text-left font-semibold text-[10px] text-[#5F6E7C] border-t-0 first:border-l-0 last:border-r-0'
                 >
                   {flexRender(
                     header.column.columnDef.header,
