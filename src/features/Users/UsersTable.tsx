@@ -1,6 +1,5 @@
 import React, { useState, useMemo, ChangeEvent } from 'react';
-import { useGetUsersQuery } from '../../services/users';
-import { User } from '../../services/types';
+import {useGetUsersQuery, User} from '../../app/services/users';
 import {
   useReactTable,
   ColumnDef,
@@ -63,8 +62,6 @@ const UsersTable: React.FC = () => {
           cell: ({ row }: {row: Row<User>}) => {
             const { firstName, lastName, image } = row.original;
 
-            console.log('ROW > ', row);
-
             return (
               <div className='flex flex-row items-center'>
                 <img
@@ -83,6 +80,7 @@ const UsersTable: React.FC = () => {
           header: 'Birthday',
           cell: ({ row }: {row: Row<User>}) => {
             const { birthDate, age } = row.original;
+
             return (
               <>
                 {moment(birthDate).format('DD.MM.YYYY')} ({age} years old)
@@ -94,6 +92,7 @@ const UsersTable: React.FC = () => {
           header: 'Gender',
           cell: ({ row }: {row: Row<User>}) => {
             const { gender } = row.original;
+
             return (
               <>
                 {gender === 'male' ? (
@@ -125,6 +124,7 @@ const UsersTable: React.FC = () => {
           header: 'General info',
           cell: ({ row }: {row: Row<User>}) => {
             const { bloodGroup, height, weight, hair } = row.original;
+
             return (
               <>
                 Bloodgroup: "{bloodGroup}"; Height: {Math.floor(height)};
