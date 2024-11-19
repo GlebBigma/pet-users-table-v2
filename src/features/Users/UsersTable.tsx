@@ -1,4 +1,4 @@
-import { useState, useMemo, ChangeEvent } from 'react';
+import React, { useState, useMemo, ChangeEvent } from 'react';
 import { useGetUsersQuery } from '../../services/users';
 import { User } from '../../services/types';
 import {
@@ -6,6 +6,7 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  Row,
 } from '@tanstack/react-table';
 import moment from 'moment';
 import SearchField from '../../components/UIComponents/SearchField/SearchField';
@@ -59,8 +60,10 @@ const UsersTable: React.FC = () => {
       [
         {
           header: 'Full Name',
-          cell: ({ row }) => {
+          cell: ({ row }: {row: Row<User>}) => {
             const { firstName, lastName, image } = row.original;
+
+            console.log('ROW > ', row);
 
             return (
               <div className='flex flex-row items-center'>
@@ -78,7 +81,7 @@ const UsersTable: React.FC = () => {
         },
         {
           header: 'Birthday',
-          cell: ({ row }) => {
+          cell: ({ row }: {row: Row<User>}) => {
             const { birthDate, age } = row.original;
             return (
               <>
@@ -89,7 +92,7 @@ const UsersTable: React.FC = () => {
         },
         {
           header: 'Gender',
-          cell: ({ row }) => {
+          cell: ({ row }: {row: Row<User>}) => {
             const { gender } = row.original;
             return (
               <>
@@ -120,7 +123,7 @@ const UsersTable: React.FC = () => {
         },
         {
           header: 'General info',
-          cell: ({ row }) => {
+          cell: ({ row }: {row: Row<User>}) => {
             const { bloodGroup, height, weight, hair } = row.original;
             return (
               <>
