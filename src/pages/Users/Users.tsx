@@ -8,6 +8,7 @@ import {
   Row,
 } from '@tanstack/react-table';
 import moment from 'moment';
+import useDebounce from '../../hooks/useDebounce.ts';
 import SearchField from '../../components/UIComponents/SearchField/SearchField';
 import NotFound from '../../components/UIComponents/EmptyState/EmptyState';
 import UsersTableSettings from './UsersTableSettings';
@@ -24,6 +25,7 @@ export type CustomColumnDef<TData> = ColumnDef<TData> & {
 
 const Users: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const debouncedSearchTerm = useDebounce<string>(searchTerm, 500);
   const [itemsPerPage, setItemsPerPage] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [visibleColumns, setVisibleColumns] = useState<{
@@ -41,7 +43,7 @@ const Users: React.FC = () => {
     'Mac IP': true,
   });
   const {data, error, isLoading} = useGetUsersQuery({
-    searchTerm,
+    searchTerm: debouncedSearchTerm,
     limit: itemsPerPage,
     page: currentPage,
   });
