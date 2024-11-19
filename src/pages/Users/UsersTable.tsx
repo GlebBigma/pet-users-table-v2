@@ -174,9 +174,9 @@ const UsersTable: React.FC<UsersTableProps> = ({data, error, isLoading, visibleC
   };
 
   return (
-    <>
+    <div className="h-[550px] overflow-x-auto relative border border-solid border-[#EAEDF0] rounded-tl-[12px] rounded-tr-[12px] bg-[#f7faf9]">
       {renderUsersTableContent()}
-    </>
+    </div>
   );
 }
 

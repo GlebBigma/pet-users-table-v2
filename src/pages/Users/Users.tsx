@@ -63,12 +63,10 @@ const Users: React.FC = () => {
           visibleColumns={visibleColumns}
           onToggleColumn={toggleColumnVisibility}
         />
-        <div className="h-[550px] overflow-x-auto relative border border-solid border-[#EAEDF0] rounded-tl-[12px] rounded-tr-[12px] bg-[#f7faf9]">
-          <UsersTable data={data}
-                      error={error}
-                      isLoading={isLoading}
-                      visibleColumns={visibleColumns} />
-        </div>
+        <UsersTable data={data}
+                    error={error}
+                    isLoading={isLoading}
+                    visibleColumns={visibleColumns} />
         <Pagination
           totalItems={data?.total}
           itemsPerPage={itemsPerPage}
