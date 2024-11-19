@@ -67,7 +67,7 @@ const Pagination: React.FC<PaginationProps> = ({
       </SelectItemsPerPage>
 
       <div className="flex items-center">
-        <div className="mr-[12px]  font-semibold uppercase text-[10px] tracking-[0.2px] text-[#5F6E7C]">
+        <div className="mr-[12px] font-semibold uppercase text-[10px] tracking-[0.2px] text-[#5F6E7C]">
           {`${(currentPage - 1) * itemsPerPage + 1} - ${Math.min(
             currentPage * itemsPerPage,
             totalItems
