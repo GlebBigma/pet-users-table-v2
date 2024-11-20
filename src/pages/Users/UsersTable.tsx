@@ -165,11 +165,12 @@ const UsersTable: React.FC<UsersTableProps> = ({data, error, isLoading, visibleC
         <tbody>
         {table.getRowModel().rows.map((row) => (
           <tr key={row.original.id}
-          onClick={() => handleRowClick(row.original)}>
+              className="bg-[#FFFFFF] hover:bg-[#f7faf9] cursor-pointer"
+              onClick={() => handleRowClick(row.original)}>
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.id}
-                className="first:min-w-[180px] first:sticky first:left-0 py-[12px] px-[8px] bg-[#FFFFFF] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932] whitespace-nowrap first:border-l-0 last:border-r-0"
+                className="first:min-w-[180px] first:sticky first:left-0 py-[12px] px-[8px] border border-solid border-[#EAEDF0] text-left font-normal text-[13px] text-[#202932] whitespace-nowrap first:border-l-0 last:border-r-0"
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </td>

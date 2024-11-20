@@ -43,7 +43,11 @@ export const usersApi = createApi({
           (page - 1) * limit
         }`,
     }),
+
+    getUser: builder.query<User, number>({
+      query: (userId) => `users/${userId}`,
+    })
   }),
 });
 
-export const { useGetUsersQuery } = usersApi;
+export const { useGetUsersQuery, useGetUserQuery } = usersApi;
