@@ -10,6 +10,7 @@ import { ROUTES } from './routes/routes.ts';
 import Root from './routes/root.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
 import Users from './pages/Users/Users.tsx';
+import User from './pages/User/User.tsx';
 
 import './index.css';
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: ROUTES.USERS,
         element: <Users />
+      },
+      {
+        path: `${ROUTES.USER}/:userId`,
+        element: <User />
       }
     ]
   },

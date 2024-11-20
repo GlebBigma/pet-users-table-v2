@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment/moment';
 import { flexRender, getCoreRowModel, Row, useReactTable } from '@tanstack/react-table';
 import { CustomColumnDef } from './Users.tsx';
@@ -17,7 +18,9 @@ interface UsersTableProps {
   visibleColumns: { [key: string]: boolean };
 }
 
-const UsersTable: React.FC<UsersTableProps> = ({data, error, isLoading, visibleColumns}) =>{
+const UsersTable: React.FC<UsersTableProps> = ({data, error, isLoading, visibleColumns}) => {
+  const navigate = useNavigate();
+
   const columns: CustomColumnDef<User>[] = useMemo(
     () =>
       [
@@ -136,6 +139,10 @@ const UsersTable: React.FC<UsersTableProps> = ({data, error, isLoading, visibleC
                        title="Not Found" />;
     }
 
+    const handleRowClick = (user: User) => {
+      navigate(`/user/${user.id}`);
+    }
+
     return (
       <table className="min-w-full table-auto border-collapse border-none">
         <thead>
@@ -157,7 +164,8 @@ const UsersTable: React.FC<UsersTableProps> = ({data, error, isLoading, visibleC
         </thead>
         <tbody>
         {table.getRowModel().rows.map((row) => (
-          <tr key={row.id}>
+          <tr key={row.original.id}
+          onClick={() => handleRowClick(row.original)}>
             {row.getVisibleCells().map((cell) => (
               <td
                 key={cell.id}
