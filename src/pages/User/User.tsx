@@ -1,13 +1,14 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useGetUserQuery } from '../../app/services/users';
 import NotFound from '../../components/UIComponents/EmptyState/EmptyState.tsx';
 import IconLoading from '../../components/Icons/IconLoading.tsx';
 import IconError from '../../components/Icons/IconError.tsx';
 
 const UserDetail: React.FC = () => {
-  const { userId } = useParams<{ userId: string }>(); // Отримуємо ID з URL
-  const { data, error, isLoading } = useGetUserQuery(Number(userId)); // Отримуємо дані користувача по ID
+  const { userId } = useParams<{ userId: string }>();
+  const navigate = useNavigate();
+  const { data, error, isLoading } = useGetUserQuery(Number(userId));
 
   if (isLoading) {
     return <NotFound icon={<IconLoading />} title="Loading..." />;
@@ -23,6 +24,14 @@ const UserDetail: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <div className="absolute top-6 left-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 transition-colors"
+        >
+          Back
+        </button>
+      </div>
       <div className="w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
         <div className="flex items-center mb-6">
           <img
